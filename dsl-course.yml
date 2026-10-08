@@ -15,7 +15,7 @@ course_description: "This course aims to deliver a compact and tailored introduc
 # registered separately in .github/semesters.yml.
 
 # Set by `--central-ref` at bootstrap - see the commented note above.
-central_ref: main
+central_ref: preview
 
 # ---------------------------------------------------------------------------
 # People. Two DIFFERENT things live under the `people:` key below - don't
