@@ -1,38 +1,16 @@
 # SYSTEM-OWNED - do not edit, edits here are overwritten. This workflow is
 # re-rendered from the central DSL teaching toolkit by 'Refresh actions' (nightly).
-name: Generate syllabus
+name: Bootstrap semester
 
-# Writes the weekly plan of a syllabus - one block per session, with its title, its
-# learning objectives and its reading list - from the semester's
-# semester-config/schedule.yml and its readings entries.
-#
-# It goes into your syllabus file (SYLLABUS.md, or the one materials.yml declares),
-# between <!-- dsl:weekly-plan --> and <!-- /dsl:weekly-plan -->; without those lines it
-# adds them under "## Weekly plan" at the end. Move the marked block anywhere in the file
-# and a re-run updates it there; nothing else in the file changes.
-# Dropdowns are refreshed by the 'Refresh actions' workflow.
+# You create the empty semester org in the web UI first (GitHub has no org-creation API)
+# and add the bot as an owner. Then run this with that org's name.
 
 on:
   workflow_dispatch:
     inputs:
-      course_source_repo:
-        description: "Repo holding your syllabus and readings"
-        required: true
-        type: choice
-        default: "course-materials-f2026"
-        options:
-          - course-materials-f2026
       semester_org:
-        description: "Semester whose schedule.yml supplies the sessions"
+        description: "Empty semester org you've already created (bot must be an owner)"
         required: true
-        type: choice
-        default: "DELETE-maths-f2026"
-        options:
-          - DELETE-maths-f2026
-      preview:
-        description: "Preview - print the block, write nothing to your syllabus"
-        type: boolean
-        default: true
 
 permissions: {}
 
@@ -56,10 +34,10 @@ jobs:
           cat /tmp/gherr || true
           exit 1
 
-  syllabus:
+  bootstrap-semester:
     needs: check-team
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
         with:
@@ -77,14 +55,18 @@ jobs:
           cache: pip
           cache-dependency-path: requirements.txt
       - run: pip install -r requirements.txt
-      - name: Generate
+      - name: Bootstrap + register + refresh
         env:
           GH_TOKEN: ${{ secrets.DSL_BOT_TOKEN }}
+          DSL_BOT_TOKEN: ${{ secrets.DSL_BOT_TOKEN }}
           COURSE: ${{ github.repository_owner }}
-          SEMESTER_ORG: ${{ inputs.semester_org }}
-          SOURCE_REPO: ${{ inputs.course_source_repo }}
-          PREVIEW: ${{ inputs.preview }}
+          SEMESTER: ${{ inputs.semester_org }}
+          # Forwarded, not looked up: this runs in the COURSE org, whose own bootstrap
+          # propagated the address here, so --propagate-secret can pass it down to the
+          # semester. Empty on a course org that never got one - the semester then falls back
+          # to GRAPH_SENDER like everything else.
+          DSL_MAINTAINER_EMAIL: ${{ secrets.DSL_MAINTAINER_EMAIL }}
         run: |
-          args=(--course-org "$COURSE" --semester-org "$SEMESTER_ORG" --course-source-repo "$SOURCE_REPO")
-          if [ "$PREVIEW" = "false" ]; then args+=(--no-preview); else args+=(--preview); fi
-          python3 -m dsl_course.syllabus "${args[@]}"
+          python3 -m dsl_course.bootstrap_course --org "$SEMESTER" \
+            --semester --course "$COURSE" --propagate-secret
+          python3 -m dsl_course.seed refresh --course-org "$COURSE"
