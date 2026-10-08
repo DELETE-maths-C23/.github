@@ -27,7 +27,11 @@ List of all repositories associated with the course org. _Auto-discovered from t
 
 | Repo | Visibility | Description |
 | --- | --- | --- |
-| _(no repos yet)_ | | |
+| [assignment-1-f2026](https://github.com/DELETE-maths-C23/assignment-1-f2026) | private | Assignment 1 template |
+| [assignment-2-f2026](https://github.com/DELETE-maths-C23/assignment-2-f2026) | private | Assignment 2 template |
+| [assignment-3-f2026](https://github.com/DELETE-maths-C23/assignment-3-f2026) | private | Assignment 3 template |
+| [assignment-4-f2026](https://github.com/DELETE-maths-C23/assignment-4-f2026) | private | Assignment 4 template |
+| [course-materials-f2026](https://github.com/DELETE-maths-C23/course-materials-f2026) | private | Course materials (lectures/labs/readings/datasets/other) by session |
 
 Edit & stage new course-related content in these, then release it to the relevant cohort org.
 
