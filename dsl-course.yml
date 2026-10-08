@@ -25,10 +25,10 @@ course_code: GRAD-C23
 # what it does and can be edited there afterwards; changing them here changes the NEXT
 # assignment, never one that already exists. The two late-work lines are the toolkit's
 # own default, applied when they are absent here and from the assignment too.
-assignment_defaults:
-  max_team_size: 5            # group assignments only
-  late_window_days: 10        # 0 = nothing after the due date is accepted
-  late_penalty_per_day: 10%   # of the EARNED grade, per day started
+# The blurb on every cohort site, on ONE line. Jan's own text, moved here verbatim
+# from the f2026 site repo's _config.yml so the course declares it rather than each
+# cohort site carrying a hand edit.
+course_description: "This course aims to deliver a compact and tailored introduction to the core mathematical concepts of data science: probability theory, calculus, linear algebra, and statistics. We will establish and reinforce the foundation that will support your further studies in machine learning, deep learning, and causal inference, and which will inform how you conceptualize and analyze data. By the end of the course, students will (re)acquaint themselves with the basic principles of probability theory that structure the process that generates data; with the behavior of functions that describe relationships in data; with the rules of linear algebra that govern how to manipulate data; and, finally, with the tools of statistical learning that we use to extract information from our datasets."
 
 # `course_name`, `course_code` and `course_description` are what reach the cohort
 # websites. Editing them here re-syncs every cohort site already bootstrapped from this
